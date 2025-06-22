@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
-from .models import Product
+from .models import Product,Category
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import forms
 
@@ -12,6 +12,11 @@ from .forms import SignUpForm
 def home(request):
     products=Product.objects.all()
     return render(request,'home.html',{'products':products})
+
+
+def product(request,pk):
+    product=Product.objects.get(pk=pk)
+    return render(request,'product.html',{'product':product})
 
 def about(request):
     return render(request,'about.html',{})
@@ -61,3 +66,16 @@ def register_user(request):
 
      return render(request,"registration.html",{'form':form})
  
+def category(request,foo):
+    foo=foo.replace('-',' ')
+    try:
+     category=Category.objects.get(name=foo)
+     products=Product.objects.filter(category=category)
+    
+     return render(request,"category.html",{'products':products,'category':category})
+    except Category.DoesNotExist:
+         
+      messages.success(request,(" NO SUch Category  "))
+      return redirect('home')
+    
+
