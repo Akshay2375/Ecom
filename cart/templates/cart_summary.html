@@ -10,7 +10,142 @@
                 </div>
             </div>
         </header>
+
+        {% if cart_products %}
+           {% for product in cart_products %}
+           <div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{product.name}}</h5>
+    <p class="card-text">{{product.description}}</p>
+        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+      </div>
+    
+    
+    
+    {% if product.is_sale%}
+    
+    <strike>
+        {{ product.price }}
+    </strike> 
+    &nbsp; {{ product.sale_price }}
+    
+    {% else %}
+    
+    {{product.price}}
+    {% endif %}
+    <div>
+      <div class="row justify-content-center">
+    <div class="col-md-2">Quantity:</div>
+                 
+ <select class="form-select form-select-sm" id="select{{product.id}}" name="product_qty">
+  {% for key, value in quantities.items %}
+    {% if key == product.id|slugify %}
+      <option selected>{{ value }}</option>
+    {% endif %}
+  {% endfor %}
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+                </div>
+</select>
+
+</div>
+    </div>
+</div>
+
+<br/>
+<a href="{% url 'home' %} " class="btn btn-outline-dark">Home</a>
+   
+ 
+   
+<button type="button" data-index="{{ product.id}}" class="btn btn-secondary update-cart"> Update  </button>
+<button type="button" data-index="{{ product.id}}" class="btn btn-danger delete-product"> remove  </button>
+
+</div>
+            {% endfor %}
+            {% else %}
+            <h2> NO PRODUCT IN CART</h2>
+            {% endif %}
+
         <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>
         
         
+<script>
+// Check if button pressed
+$(document).on('click', '.update-cart', function(e){
+
+    e.preventDefault();
+    var productid=$(this).data('index');
+    $.ajax({
+        type: 'POST',
+        url: '{% url 'cart_update' %}',
+        data: {
+    product_id:$(this).data('index'),
+product_qty: $('#select' + productid).val(),
+    
+    csrfmiddlewaretoken: '{{ csrf_token }}',
+    action: 'post'
+        },
+
+         success:function(json){
+          // document.getElementById("cart_quantity").
+          // textContent=json.qty
+          location.reload();
+         },
+
+        error: function(xhr, errmsg, err){
+
+        }
+
+
+    });
+
+
+
+})
+
+
+
+
+</script>
+<script>
+// Check if button pressed
+$(document).on('click', '.delete-product', function(e){
+
+    e.preventDefault();
+    // var productid=$(this).data('index');
+    $.ajax({
+        type: 'POST',
+        url: '{% url 'cart_delete' %}',
+        data: {
+    product_id:$(this).data('index'),
+ 
+    
+    csrfmiddlewaretoken: '{{ csrf_token }}',
+    action: 'post'
+        },
+         success:function(json){
+          // document.getElementById("cart_quantity").
+          // textContent=json.qty
+          location.reload();
+         },
+
+        error: function(xhr, errmsg, err){
+        }
+    });
+})
+
+
+
+
+</script>
+
 {% endblock %}

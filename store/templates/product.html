@@ -30,11 +30,20 @@
     </div>
 </div>
 
-</div>
 <br/>
+div class="row justify-content-center">
+    <div class="col-md-2">Quantity:</div>
+<div>
+  <select class="form-select" id="qty-cart" name="product_qty"  >
+    <option value="" disabled selected>Select Quantity</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </select>
+</div>
+
 <a href="{% url 'home' %} " class="btn btn-outline-dark">Home</a>
      <button type="button" value="{{ product.id }}" class="btn btn-secondary" id="add-cart">Add To Cart</button>
-
 <script>
 // Check if button pressed
 $(document).on('click', '#add-cart', function(e){
@@ -44,14 +53,15 @@ $(document).on('click', '#add-cart', function(e){
         url: '{% url 'cart_add' %}',
         data: {
     product_id: $('#add-cart').val(),
+    product_qty: $('#qty-cart option:selected').text(),
     
     csrfmiddlewaretoken: '{{ csrf_token }}',
     action: 'post'
         },
 
          success:function(json){
-          document.getElementById("cart_quantity").
-          textContent=json.qty
+          document.getElementById("cart_quantity").textContent = json.qty
+        location.reload();
          },
 
         error: function(xhr, errmsg, err){
