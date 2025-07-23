@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import forms
 from django.contrib.auth.models import User
 
-from .forms import SignUpForm,UpdateUserForm
+from .forms import SignUpForm,UpdateUserForm,ChangePassword
 
 
 # @login_required(login_url='login/')
@@ -99,6 +99,22 @@ def update_user(request):
     else:
             messages.success(" login")
             return redirect('home')
-
-
- 
+def update_password(request):
+    user = request.user
+    if user.is_authenticated:
+        if request.method == "POST":
+            form = ChangePassword(user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Password updated.")
+                return redirect('login')
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+                return redirect('update_password')
+        else:
+            form = ChangePassword(user)
+            return render(request, 'update_password.html', {"form": form})
+    else:
+        messages.success(request, "Login first.")
+        return redirect('login')  # ✅ Add this line
