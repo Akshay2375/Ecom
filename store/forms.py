@@ -1,11 +1,32 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm,SetPasswordForm
 from django.contrib.auth.models import User
+from .models import Profile
+from django.db import models
+
+
+class UserInfoForm(forms.ModelForm):
+ 
+    phone=forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone'}) ,required=False )
+    address1=forms.CharField( label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'address'}) ,required=False )
+    address2=forms.CharField( label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'address'}) ,required=False)
+    city=forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'city'}) ,required=False )
+    state=forms.CharField( label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'state'}) ,required=False)
+    country=forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'country'}) ,required=False )
+
+    class Meta:
+        model=Profile
+        fields=( 'phone',
+ 'address1',
+ 'address2',
+ 'city',
+  'country')
+    
 
 class SignUpForm(UserCreationForm):
-    email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}))
-    first_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}))
-    last_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}))
+    email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),required=False)
+    first_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),required=False)
+    last_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),required=False)
 
     class Meta:
         model = User

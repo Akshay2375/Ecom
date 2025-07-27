@@ -5,8 +5,9 @@ from .models import Product,Category
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import forms
 from django.contrib.auth.models import User
+from .models import Profile
 
-from .forms import SignUpForm,UpdateUserForm,ChangePassword
+from .forms import SignUpForm,UpdateUserForm,ChangePassword,UserInfoForm
 
 
 # @login_required(login_url='login/')
@@ -58,7 +59,8 @@ def register_user(request):
             password=form.cleaned_data['password1']
             user=authenticate(username=username,password=password)
             login(request,user)
-            return redirect('home')
+            messages.success(request,("please enter the info  "))
+            return redirect('update_info')
         else:
          messages.success(request,(" Problem REGISTER AGAIN  "))
          return redirect('register')
@@ -83,6 +85,23 @@ def category(request,foo):
 def category_summary(request):
          categories=Category.objects.all()
          return render(request,"category_summary.html",{'categories':categories})
+
+
+
+def update_info(request):
+     if request.user.is_authenticated:
+        current_user=Profile.objects.get(user__id=request.user.id)
+        form=UserInfoForm(request.POST or None,instance=current_user)
+        
+        if form.is_valid():
+            form.save()
+            
+            messages.success(request,"  INfo  HAS BEEN UPDATE")
+            return redirect('home')
+        return render(request,'update_info.html',{'form':form})
+     else:
+            messages.success(request," login")
+            return redirect('home')
 
 
 def update_user(request):
