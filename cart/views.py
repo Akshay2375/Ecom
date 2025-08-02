@@ -12,6 +12,9 @@ def cart_summary(request):
     
     return render(request,'cart_summary.html',{'cart_products':cart_products,"quantities":quantities,'totals':totals})
 
+
+
+
 def cart_add(request):
     cart=Cart(request)
     if request.POST.get('action')=='post':

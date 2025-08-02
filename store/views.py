@@ -6,10 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import forms
 from django.contrib.auth.models import User
 from .models import Profile
-
+from django.db.models import Q
 from .forms import SignUpForm,UpdateUserForm,ChangePassword,UserInfoForm
-
-
+import json
+from cart.cart import Cart
 # @login_required(login_url='login/')
 def home(request):
     products=Product.objects.all()
@@ -31,6 +31,16 @@ def login_user(request):
         user=authenticate(request,username=username,password=password)
         if user is not None:
             login(request,user)
+            
+            current_user=Profile.objects.get(user__id=request.user.id)
+            saved_cart=current_user.old_cart
+            if saved_cart:
+                converted_cart=json.loads(saved_cart)
+                cart=Cart(request)
+                
+                for key,value in converted_cart.items():
+                    cart.db_add(product=key,quantity=value)
+                
             messages.success(request,(" YOU ARE LOGGED IN "))
             return redirect('home')
         else:
@@ -46,7 +56,17 @@ def logout_user(request):
     messages.success(request,(" LOGEED OUT  "))
     return redirect('login')
 
-
+def search(request):
+    if request.method=='POST':
+        searched=request.POST['searched']
+        searched=Product.objects.filter(Q(name__icontains=searched)|Q(description__icontains=searched))
+        if not searched:
+            messages.success(request,(" nothing found  "))
+            return render(request,"search.html")
+        else:
+         return render(request,"search.html",{'searched':searched})
+    else:
+     return render(request,"search.html")
 def register_user(request):
     form=SignUpForm()
 
