@@ -115,12 +115,13 @@ def category_summary(request):
 def update_info(request):
      if request.user.is_authenticated:
         current_user=Profile.objects.get(user__id=request.user.id)
+        shipping_user=ShippingAdress.objects.get(user__id=request.user.id)
         form=UserInfoForm(request.POST or None,instance=current_user)
         
-        shipping_user=ShippingAdress.objects.get(id=request.user.id)
         shipping_form=Shippingform(request.POST or None,instance=shipping_user)
-        if form.is_valid():
+        if form.is_valid() or shipping_form :
             form.save()
+            shipping_form.save()
             
             messages.success(request,"  INfo  HAS BEEN UPDATE")
             return redirect('home')
