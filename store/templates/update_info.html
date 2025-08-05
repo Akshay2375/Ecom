@@ -18,6 +18,9 @@
   <form method="post" action="{% url 'update_info' %}" class="text-center" >
     {% csrf_token %}
     {{form.as_p}}
+    <br/><br/>
+    {{shipping_form.as_p}} 
+    
     <button type="submit">Submit </button>
   </form>
   <br/><br/>
