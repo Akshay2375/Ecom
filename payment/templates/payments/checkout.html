@@ -1,0 +1,63 @@
+
+{% extends 'base.html' %}
+{% load static %}
+        {% block content %}
+        
+           <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Cheeck Out </h1>
+                    <p class="lead fw-normal text-white-50 mb-0">ALL the item related to u  </p>
+                </div>
+            </div>
+        </header>
+
+   <div class="card">
+  <div class="card-header">
+    Featured
+  </div>
+<div class="d-flex justify-content-center mt-5">
+  <div class="card" style="width: 18rem;">
+    <div class="card-body text-center">
+      <h5 class="card-title">Order Summary</h5>
+      {% for product in cart_products %}
+        {{ product.name }}:
+        {% if product.is_sale %}
+          {{ product.sale_price }}
+        {% else %}
+          {{ product.price }}
+        {% endif %}
+        <br />
+        Quantities:
+        {% for key, value in quantities.items %}
+          {% if key == product.id|slugify %}
+            {{ value }}
+          {% endif %}
+        {% endfor %}
+        <br /><br />
+      {% endfor %}
+      Total: {{ totals }}
+      <br /><br />
+      <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-dark">Update Cart</a>
+    </div>
+  </div>
+</div>
+
+<br />
+
+<div class="d-flex justify-content-center">
+  <div class="card" style="width: 18rem;">
+    <div class="card-header text-center">
+      Shipping Info
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        {{ shipping_form.as_p }}
+        <button type="submit" class="btn btn-secondary mt-2 w-100">Continue to Billing</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
