@@ -14,3 +14,11 @@ class Shippingform(forms.ModelForm):
         model=ShippingAdress
         fields='__all__'
         exclude=['user',]
+        
+        
+        
+class PaymentForm(forms.Form):
+    card_number=forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'card Number'}) ,required=False)
+    card_name=forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'card name'}) ,required=False) 
+    card_address=forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'card adrress'}) ,required=False)
+    card_city=forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'card city'}) ,required=False)
