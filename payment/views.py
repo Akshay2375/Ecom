@@ -6,6 +6,32 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import PaymentForm
 
+
+def orders(request,pk):
+    if request.user.is_authenticated and request.user.is_superuser:
+        orders=Order.objects.get(pk=pk)
+        items=OrderItem.objects.filter(order=pk)
+        return render(request,'payments/orders.html',{'order':orders,'items':items}) 
+    else:
+        messages.success(request," Access Denined ")
+        return redirect('home')
+
+def not_shipped_dash(request):
+    if request.user.is_authenticated and request.user.is_superuser:
+        orders=Order.objects.filter(shipped=False)
+        return render(request,'payments/not_shipped_dash.html',{'orders':orders}) 
+    else:
+        messages.success(request," Access Denined ")
+        return redirect('home')
+def shipped_dash(request):
+     orders=Order.objects.filter(shipped=True)
+     if request.user.is_authenticated and request.user.is_superuser:
+        return render(request,'payments/shipped_dash.html',{'orders':orders })
+      
+     else:
+        messages.success(request,"  Access Denined ")
+        return redirect('home')
+    
       
 def payment_success(request):
     return render(request,'payments/payment_success.html')
@@ -51,6 +77,10 @@ def process_order(request):
                     if int(key)==product.id:
                         create_order_item=OrderItem( user=request.user,product_id=product_id,order_id=order_id,quantity=value,price=price)
                         create_order_item.save()
+                        
+           for key in list(request.session.keys()):
+                if key=='session_key':
+                    del request.session['key']
            
            
            
@@ -81,7 +111,11 @@ def process_order(request):
                         create_order_item.save()
            
            
-           
+           for key in list(request.session.keys()):
+                if key=='session_key':
+                    del request.session['key']
+                
+                
            
            
            

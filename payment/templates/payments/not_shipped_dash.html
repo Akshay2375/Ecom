@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">UN Shipped Items</h1>
+                    <p class="lead fw-normal text-white-50 mb-0"> </p>
+                </div>
+            </div>
+        </header>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Order</th>
+      <th scope="col">Price</th>
+      <th scope="col">Name</th>
+      <th scope="col">email</th>
+      <th scope="col">date_shipped</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for order in orders %}
+    <tr>
+      <td><a href="{% url 'orders' order.id %}"> {{order.id}}</a></td>
+      <td>{{order.amount_paid}}</td>
+      <td>{{order.full_name}}</td>
+      <td>{{order.email}}</td>
+      <td>{{order.date_shipped}}</td>
+    </tr>
+    {% endfor %}
+  
+  </tbody>
+</table>
+    
+
+{% endblock %}

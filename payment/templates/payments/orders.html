@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Shipped Items</h1>
+                    <p class="lead fw-normal text-white-50 mb-0"> </p>
+                </div>
+            </div>
+        </header>
+<div class="card">
+  <div class="card-header">
+   order {{order.id}}-{{order.amount_paid}}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Special title treatment</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    Email: {{order.email}}<br/>
+    {% if order.date_shipped %}
+    date SHipped: {{order.date_shipped}}<br/>
+    {% else %}
+      date Ordered: {{order.date_ordered}}<br/>
+      {%endif%}
+    Date Ordered:
+    Full name :{{order.full_name}}<br/>
+    SHipping Adress:{{order.shipping_address}}<br/>
+    
+
+
+    {% for item in items %}
+
+    {{item.product}}-{{item.quantity}} -{{item.price}}    
+
+    {% endfor %}
+
+  
+  </div>
+</div>
+{% endblock %}
