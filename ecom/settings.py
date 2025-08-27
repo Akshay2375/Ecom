@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-qc_*d6@rk%k(owpe4-wbd$!(x2zd!cnj+u_q2rd@w37xh%i4+w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ecom-production-ecd8.up.railway.app','https://ecom-production-ecd8.up.railway.app']
+CSRF_TRUSTED_ORIGINS=['ecom-production-ecd8.up.railway.app','https://ecom-production-ecd8.up.railway.app']
 
 
 # Application definition
@@ -40,7 +41,8 @@ INSTALLED_APPS = [
     'store',
     'cart',
     'django_filters',
-    'payment'
+    'payment',
+    'whitenoise.runserver_nostatic'
 ]
 
 MIDDLEWARE = [
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'ecom.urls'
@@ -142,3 +145,7 @@ STATICFILES_DIRS=['static/']
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+## WHITE NOISE STUFF 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT=BASE_DIR / 'staticfiles'
