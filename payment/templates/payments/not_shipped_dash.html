@@ -18,6 +18,7 @@
       <th scope="col">Name</th>
       <th scope="col">email</th>
       <th scope="col">date_shipped</th>
+      <th scope="col">SHipped Status</th>
     </tr>
   </thead>
   <tbody>
@@ -28,6 +29,15 @@
       <td>{{order.full_name}}</td>
       <td>{{order.email}}</td>
       <td>{{order.date_shipped}}</td>
+      <td> 
+        <form method="post">
+          {% csrf_token %} 
+        <input type="hidden" value="true" name="shipping_status">
+        <input type="hidden" value="{{order.id}}" name="num">
+        <button type="submit" class="btn btn-success btn-sm">MARK SHIPPED</button>
+      </form>
+      </td>
+       
     </tr>
     {% endfor %}
   

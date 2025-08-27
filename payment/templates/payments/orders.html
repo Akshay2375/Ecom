@@ -33,8 +33,20 @@
     {{item.product}}-{{item.quantity}} -{{item.price}}    
 
     {% endfor %}
-
-  
+    <br/><br/>
+    {% if not order.shipped%}
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="shipping_status" value="true">
+      <button type="submit" class="btn btn-success"> Mark Shipped</button>
+    </form>
+    {% else %}
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="shipping_status" value="false">
+      <button type="submit" class="btn btn-danger"> Mark as NOt Shipped</button>
+    </form>
+  {% endif %}
   </div>
 </div>
 {% endblock %}
