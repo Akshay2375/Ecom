@@ -1,3 +1,1 @@
-git add Procfile
-git commit -m "Fix Procfile for Railway"
-git push origin main
+web: gunicorn your_project_name.wsgi:application --bind 0.0.0.0:$PORT
